@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    env_file:
+      - ./back-end/.env    
+    ports:
+      - "3306:3306"
+    networks:
+      - neo
+    restart: always
+    volumes:
+    - "./mariadb-data/data:/var/lib/mysql/data/"
+    - "./mariadb-data/logs:/var/lib/mysql/logs/" 
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+    - PMA_ARBITRARY=1 
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
+    networks:
+      - neo
+
+  nestjs:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    container_name: back-neo
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./back-end/.env 
+    volumes:
+      - logs:/app/logs
+    depends_on:
+      - mariadb
+    networks:
+      - neo
+
+networks:
+  neo:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+  logs:
