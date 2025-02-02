@@ -1,4 +1,5 @@
 import { EnvConfig } from 'src/config/variables-config';
+import { User } from 'src/modules/user/entities/User';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const dataSourceConfig = (): DataSourceOptions => {
@@ -11,7 +12,8 @@ export const dataSourceConfig = (): DataSourceOptions => {
     database: EnvConfig.database.NAME_DB,
     synchronize: true,
     ssl: false,
-    entities: [],
+    logging: true,
+    entities: [User],
   };
 };
 
