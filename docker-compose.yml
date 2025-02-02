@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   mariadb:
     image: mariadb:latest
@@ -11,21 +12,34 @@ services:
       - neo
     restart: always
     volumes:
-    - "./mariadb-data/data:/var/lib/mysql/data/"
-    - "./mariadb-data/logs:/var/lib/mysql/logs/" 
+      - mariadb_data:/var/lib/mysql
+      - "./mariadb-data/logs:/var/lib/mysql/logs/"
 
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: phpmyadmin
     restart: always
     environment:
-    - PMA_ARBITRARY=1 
+      - PMA_ARBITRARY=1 
     ports:
       - "8080:80"
     depends_on:
       - mariadb
     networks:
       - neo
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   
+      - "15672:15672" 
+    env_file:
+      - ./back-end/.env
+    networks:
+      - neo
+
 
   nestjs:
     build:
@@ -40,6 +54,18 @@ services:
       - logs:/app/logs
     depends_on:
       - mariadb
+    networks:
+      - neo
+
+  front-end:
+    build: 
+      context: ./front-end
+      dockerfile: Dockerfile
+    container_name: front-end
+    ports:
+      - "3000:3000"
+    depends_on:
+      - nestjs
     networks:
       - neo
     
