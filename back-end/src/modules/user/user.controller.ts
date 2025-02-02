@@ -7,12 +7,14 @@ import {
   Delete,
   Patch,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { ResponseUserDto } from './dtos/ResponseUser.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @ApiTags('user')
 @Controller('/user')
@@ -27,6 +29,8 @@ export class UserController {
 
   @Get(':id')
   @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async findOne(@Param('id') id: number) {
     return new ResponseUserDto(await this.userService.findOne(id));
   }

@@ -12,4 +12,5 @@ export const EnvConfig = {
     MYSQL_DATABASE: process.env.MYSQL_DATABASE,
   },
   ENV: process.env.NODE_ENV || 'development',
+  JWT_SECRET: process.env.JWT_SECRET,
 };
