@@ -16,7 +16,7 @@ import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { ResponseUserDto } from './dtos/ResponseUser.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
-@ApiTags('user')
+@ApiTags('User')
 @Controller('/user')
 export class UserController {
   constructor(private userService: UserService) {}

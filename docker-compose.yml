@@ -37,6 +37,8 @@ services:
       - "15672:15672" 
     env_file:
       - ./back-end/.env
+    volumes:
+     - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - neo
 
@@ -77,3 +79,4 @@ networks:
 volumes:
   mariadb_data:
   logs:
+  rabbitmq_data:
